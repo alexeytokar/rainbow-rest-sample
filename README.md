@@ -1,7 +1,7 @@
 # rainbow-rest-sample
 
 # build and run
-````
+````shell
 $ ./gradlew build
 $ java -jar build/lib/rainbow-rest-sample-*.jar
 ````
