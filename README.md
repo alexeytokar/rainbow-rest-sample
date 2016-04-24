@@ -8,8 +8,8 @@ $ java -jar build/lib/rainbow-rest-sample-*.jar
 
 # verify
 initial request is:
-````
-# curl -s "http://localhost:8080" | python -mjson.tool
+````shell
+$ curl -s "http://localhost:8080" | python -mjson.tool
 {
     "element": {
         "href": "/otherresource",
@@ -26,7 +26,7 @@ initial request is:
 ````
 
 let's filter some fields out:
-````
+````shell
 $ curl -s "http://localhost:8080?fields=id" | python -mjson.tool
 {
     "id": 42
@@ -43,7 +43,7 @@ $ curl -s "http://localhost:8080?fields=id,ic,foo" | python -mjson.tool
 ````
 
 another eample is extending our flat model with "element" attribute:
-````
+````shell
 $ curl -s "http://localhost:8080?include=element" | python -mjson.tool
 {
     "element": {
@@ -70,7 +70,7 @@ $ curl -s "http://localhost:8080?include=element" | python -mjson.tool
 ````
 
 and now it is time to combine previous solutions:
-````
+````shell
 $ curl -s "http://localhost:8080?include=element,element.element&fields=id,element" | python -mjson.tool
 {
     "element": {
