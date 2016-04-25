@@ -1,5 +1,5 @@
 # rainbow-rest-sample
-This is sample site for https://github.com/alexeytokar/rainbow-rest
+This is a sample site for https://github.com/alexeytokar/rainbow-rest
 
 # build and run
 ````shell
