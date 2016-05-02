@@ -86,3 +86,37 @@ $ curl -s "http://localhost:8080?include=element,element.element&fields=id,eleme
 ````
 
 #batch processing
+````shell
+curl -s -X POST
+    --url http://localhost:8080/batch
+    --header 'accept: application/json'
+    --header 'content-type: application/json'
+    --data '{
+        "root" : "/",
+        "other" : "/otherresource?include=element&fields=id,element,name"
+    }' | python -mjson.tool
+{
+    "other": {
+        "element": {
+            "element": {},
+            "id": 42,
+            "name": "asd"
+        },
+        "id": 42,
+        "name": "asd"
+    },
+    "root": {
+        "element": {
+            "href": "/otherresource",
+            "rel": "subelement"
+        },
+        "ic": {
+            "baz": "test2",
+            "foo": "test1",
+            "id": "14"
+        },
+        "id": 42,
+        "name": "asd"
+    }
+}
+````
