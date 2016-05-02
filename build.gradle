@@ -20,6 +20,7 @@ jar {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         url "https://oss.sonatype.org/content/groups/public"
@@ -30,13 +31,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web") {
+    compile ('org.springframework.boot:spring-boot-starter-web') {
         exclude module: "spring-boot-starter-tomcat"
     }
-    compile("org.springframework.boot:spring-boot-starter-jetty")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile "org.springframework.boot:spring-boot-starter-jetty",
+            "org.springframework.boot:spring-boot-starter-actuator",
 
-    compile 'ua.net.tokar:rainbow-rest:2.1.2'
+            'ua.net.tokar:rainbow-rest:2.1.4'
 
     testCompile("junit:junit")
 }

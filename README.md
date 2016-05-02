@@ -43,7 +43,7 @@ $ curl -s "http://localhost:8080?fields=id,ic,foo" | python -mjson.tool
 }
 ````
 
-another eample is extending our flat model with "element" attribute:
+another example is extending our flat model with "element" attribute:
 ````shell
 $ curl -s "http://localhost:8080?include=element" | python -mjson.tool
 {
@@ -84,3 +84,5 @@ $ curl -s "http://localhost:8080?include=element,element.element&fields=id,eleme
     "id": 42
 }
 ````
+
+#batch processing
