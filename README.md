@@ -26,6 +26,7 @@ $ curl -s "http://localhost:8080" | python -mjson.tool
 }
 ````
 
+##fields filtering
 let's filter some fields out:
 ````shell
 $ curl -s "http://localhost:8080?fields=id" | python -mjson.tool
@@ -43,6 +44,7 @@ $ curl -s "http://localhost:8080?fields=id,ic,foo" | python -mjson.tool
 }
 ````
 
+##subtree inclusion
 another example is extending our flat model with "element" attribute:
 ````shell
 $ curl -s "http://localhost:8080?include=element" | python -mjson.tool
@@ -70,6 +72,7 @@ $ curl -s "http://localhost:8080?include=element" | python -mjson.tool
 }
 ````
 
+##combine both ?include and ?fields
 and now it is time to combine previous solutions:
 ````shell
 $ curl -s "http://localhost:8080?include=element,element.element&fields=id,element" | python -mjson.tool
@@ -86,6 +89,7 @@ $ curl -s "http://localhost:8080?include=element,element.element&fields=id,eleme
 ````
 
 #batch processing
+more complex example demonstrates how to query several endpoints with single request
 ````shell
 curl -s -X POST
     --url http://localhost:8080/batch
