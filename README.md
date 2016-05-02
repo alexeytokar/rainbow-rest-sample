@@ -1,3 +1,9 @@
+* [verify](#verify)
+ * [fields filtering](#fields-filtering)
+ * [subtree inclusion](#subtree-inclusion)
+ * [combine prev two](#combine-both-include-and-fields)
+* [batch processing](#batch-processing)
+
 # rainbow-rest-sample
 This is a sample site for https://github.com/alexeytokar/rainbow-rest
 
