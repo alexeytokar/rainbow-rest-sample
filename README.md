@@ -34,6 +34,7 @@ $ curl -s "http://localhost:8080" | python -mjson.tool
 
 ##fields filtering
 inspired by http://jsonapi.org/format/#fetching-sparse-fieldsets
+
 let's filter some fields out:
 ````shell
 $ curl -s "http://localhost:8080?fields=id" | python -mjson.tool
@@ -53,6 +54,7 @@ $ curl -s "http://localhost:8080?fields=id,ic,foo" | python -mjson.tool
 
 ##subtree inclusion
 inspired by http://jsonapi.org/format/#fetching-includes
+
 another example is extending our flat model with "element" attribute:
 ````shell
 $ curl -s "http://localhost:8080?include=element" | python -mjson.tool
