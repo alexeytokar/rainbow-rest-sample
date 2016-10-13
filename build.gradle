@@ -23,7 +23,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url "https://oss.sonatype.org/content/groups/public"
+	url "https://jitpack.io"
     }
 }
 
@@ -37,7 +37,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-jetty",
             "org.springframework.boot:spring-boot-starter-actuator",
 
-            'ua.net.tokar:rainbow-rest:2.1.6'
+            'com.github.alexeytokar:rainbow-rest:2.2.2'
 
     testCompile("junit:junit")
 }
