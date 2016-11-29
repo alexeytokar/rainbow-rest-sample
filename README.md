@@ -50,6 +50,16 @@ $ curl -s "http://localhost:8080?fields=id,ic,foo" | python -mjson.tool
     },
     "id": 42
 }
+
+$ curl -s "http://localhost:8080?fields=-ic" | python -mjson.tool
+{
+    "element": {
+        "href": "/otherresource",
+        "rel": "subelement"
+    },
+    "id": 42,
+    "name": "asd"
+}
 ````
 
 ##subtree inclusion
