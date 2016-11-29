@@ -10,7 +10,7 @@ This is a sample site for https://github.com/alexeytokar/rainbow-rest
 # build and run
 ````shell
 $ ./gradlew build
-$ java -jar build/lib/rainbow-rest-sample-*.jar
+$ java -jar build/libs/rainbow-rest-sample-*.jar
 ````
 
 # verify
