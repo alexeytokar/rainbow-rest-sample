@@ -37,7 +37,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-jetty",
             "org.springframework.boot:spring-boot-starter-actuator",
 
-            'com.github.alexeytokar:rainbow-rest:2.2.2'
+            'com.github.alexeytokar:rainbow-rest:2.2.3'
 
     testCompile("junit:junit")
 }
