@@ -1,8 +1,8 @@
-* [verify](#verify)
+ * [verify](#verify)
  * [fields filtering](#fields-filtering)
  * [subtree inclusion](#subtree-inclusion)
  * [combine prev two](#combine-both-include-and-fields)
-* [batch processing](#batch-processing)
+ * [batch processing](#batch-processing)
 
 # rainbow-rest-sample
 This is a sample site for https://github.com/alexeytokar/rainbow-rest
@@ -16,20 +16,25 @@ $ java -jar build/libs/rainbow-rest-sample-*.jar
 # verify
 initial request is:
 ```shell
-$ curl -s "http://localhost:8080" | python -mjson.tool
-{
-    "element": {
-        "href": "/otherresource",
-        "rel": "subelement"
+$ curl -s "http://localhost:8080/groups" | python -mjson.tool
+[
+    {
+        "id": 2,
+        "title": "bad group",
+        "users": {
+            "href": "/groups/2/users",
+            "rel": "users"
+        }
     },
-    "ic": {
-        "baz": "test2",
-        "foo": "test1",
-        "id": "14"
-    },
-    "id": 42,
-    "name": "asd"
-}
+    {
+        "id": 5,
+        "title": "good group",
+        "users": {
+            "href": "/groups/5/users",
+            "rel": "users"
+        }
+    }
+]
 ```
 
 ## fields filtering
@@ -37,29 +42,45 @@ inspired by http://jsonapi.org/format/#fetching-sparse-fieldsets
 
 let's filter some fields out:
 ```shell
-$ curl -s "http://localhost:8080?fields=id" | python -mjson.tool
-{
-    "id": 42
-}
-
-$ curl -s "http://localhost:8080?fields=id,ic,foo" | python -mjson.tool
-{
-    "ic": {
-        "foo": "test1",
-        "id": "14"
+$ curl -s "http://localhost:8080/groups?fields=id" | python -mjson.tool
+[
+    {
+        "id": 2
     },
-    "id": 42
-}
+    {
+        "id": 5
+    }
+]
 
-$ curl -s "http://localhost:8080?fields=-ic" | python -mjson.tool
-{
-    "element": {
-        "href": "/otherresource",
-        "rel": "subelement"
+$ curl -s "http://localhost:8080/groups?fields=id,title" | python -mjson.tool
+[
+    {
+        "id": 2,
+        "title": "bad group"
     },
-    "id": 42,
-    "name": "asd"
-}
+    {
+        "id": 5,
+        "title": "good group"
+    }
+]
+
+$ curl -s "http://localhost:8080/groups?fields=-title" | python -mjson.tool
+[
+    {
+        "id": 2,
+        "users": {
+            "href": "/groups/2/users",
+            "rel": "users"
+        }
+    },
+    {
+        "id": 5,
+        "users": {
+            "href": "/groups/5/users",
+            "rel": "users"
+        }
+    }
+]
 ```
 
 ## subtree inclusion
@@ -67,45 +88,101 @@ inspired by http://jsonapi.org/format/#fetching-includes
 
 another example is extending our flat model with "element" attribute:
 ```shell
-$ curl -s "http://localhost:8080?include=element" | python -mjson.tool
-{
-    "element": {
-        "element": {
-            "href": "/otherresource",
-            "rel": "subelement"
-        },
-        "ic": {
-            "baz": "test2",
-            "foo": "test1",
-            "id": "14"
-        },
-        "id": 42,
-        "name": "asd"
+$ curl -s "http://localhost:8080/groups?include=users" | python -mjson.tool
+[
+    {
+        "id": 2,
+        "title": "bad group",
+        "users": [
+            {
+                "friends": {
+                    "href": "/users/1/friends",
+                    "rel": "friends"
+                },
+                "name": "boss"
+            },
+            {
+                "friends": {
+                    "href": "/users/2/friends",
+                    "rel": "friends"
+                },
+                "name": "cat"
+            },
+            {
+                "friends": {
+                    "href": "/users/42/friends",
+                    "rel": "friends"
+                },
+                "name": "dog"
+            }
+        ]
     },
-    "ic": {
-        "baz": "test2",
-        "foo": "test1",
-        "id": "14"
-    },
-    "id": 42,
-    "name": "asd"
-}
+    {
+        "id": 5,
+        "title": "good group",
+        "users": [
+            {
+                "friends": {
+                    "href": "/users/1/friends",
+                    "rel": "friends"
+                },
+                "name": "boss"
+            },
+            {
+                "friends": {
+                    "href": "/users/2/friends",
+                    "rel": "friends"
+                },
+                "name": "cat"
+            },
+            {
+                "friends": {
+                    "href": "/users/42/friends",
+                    "rel": "friends"
+                },
+                "name": "dog"
+            }
+        ]
+    }
+]
 ```
 
 ## combine both ?include and ?fields
 and now it is time to combine previous solutions:
 ```shell
-$ curl -s "http://localhost:8080?include=element,element.element&fields=id,element" | python -mjson.tool
-{
-    "element": {
-        "element": {
-            "element": {},
-            "id": 42
-        },
-        "id": 42
+$ curl -s "http://localhost:8080/groups?include=users&fields=id,title,users,name" | python -mjson.tool
+[
+    {
+        "id": 2,
+        "title": "bad group",
+        "users": [
+            {
+                "name": "boss"
+            },
+            {
+                "name": "cat"
+            },
+            {
+                "name": "dog"
+            }
+        ]
     },
-    "id": 42
-}
+    {
+        "id": 5,
+        "title": "good group",
+        "users": [
+            {
+                "name": "boss"
+            },
+            {
+                "name": "cat"
+            },
+            {
+                "name": "dog"
+            }
+        ]
+    }
+]
 ```
 
 # batch processing
@@ -116,31 +193,50 @@ curl -s -X POST
     --header 'accept: application/json'
     --header 'content-type: application/json'
     --data '{
-        "root" : "/",
-        "other" : "/otherresource?include=element&fields=id,element,name"
+        "groups" : "/groups",
+        "groups2users" : "/groups/2/users"
     }' | python -mjson.tool
 {
-    "other": {
-        "element": {
-            "element": {},
-            "id": 42,
-            "name": "asd"
+    "groups": [ 
+        {
+            "id": 2,
+            "title": "bad group",
+            "users": {
+                "href": "/groups/2/users",
+                "rel": "users"
+            }
         },
-        "id": 42,
-        "name": "asd"
-    },
-    "root": {
-        "element": {
-            "href": "/otherresource",
-            "rel": "subelement"
+        {
+            "id": 5,
+            "title": "good group",
+            "users": {
+                "href": "/groups/5/users",
+                "rel": "users"
+            }
+        }
+    ],
+    "groups2users": [
+        {
+            "friends": {
+                "href": "/users/1/friends",
+                "rel": "friends"
+            },
+            "name": "boss"
         },
-        "ic": {
-            "baz": "test2",
-            "foo": "test1",
-            "id": "14"
+        {
+            "friends": {
+                "href": "/users/2/friends",
+                "rel": "friends"
+            },
+            "name": "cat"
         },
-        "id": 42,
-        "name": "asd"
-    }
+        {
+            "friends": {
+                "href": "/users/42/friends",
+                "rel": "friends"
+            },
+            "name": "dog"
+        }
+    ]
 }
 ```
